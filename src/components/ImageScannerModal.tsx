@@ -87,44 +87,44 @@ export const ImageScannerModal: React.FC<ImageScannerModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl my-8">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-slate-950/80 backdrop-blur-sm">
+      <div className="bg-slate-900 border border-slate-800 rounded-t-2xl sm:rounded-2xl max-w-2xl w-full max-h-[92vh] sm:max-h-[85vh] flex flex-col overflow-hidden shadow-2xl my-0 sm:my-8">
         
         {/* Modal Header */}
-        <div className="bg-slate-950 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+        <div className="bg-slate-950 px-4 sm:px-6 py-3.5 border-b border-slate-800 flex items-center justify-between shrink-0">
           <div className="flex items-center space-x-2">
-            <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg">
+            <div className="p-2 bg-blue-500/20 text-blue-400 rounded-lg shrink-0">
               <Camera className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">
+              <h2 className="text-base sm:text-lg font-bold text-white">
                 Escanear Planilla o Foto con IA
               </h2>
-              <p className="text-xs text-slate-400">
-                Sube una foto de tu planilla manuscrita o Excel para extraer automáticamente las solicitudes de revisión.
+              <p className="text-[11px] sm:text-xs text-slate-400">
+                Extrae solicitudes de revisión desde una foto o captura.
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+            className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors touch-manipulation min-h-[40px] min-w-[40px] flex items-center justify-center"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 overflow-y-auto flex-1">
           
           {/* File Upload Zone */}
           {!selectedImage && (
-            <label className="border-2 border-dashed border-slate-700 hover:border-amber-500 rounded-2xl p-8 flex flex-col items-center justify-center cursor-pointer bg-slate-950/40 hover:bg-slate-950 transition-all">
-              <Upload className="w-10 h-10 text-amber-400 mb-3" />
-              <span className="text-sm font-bold text-slate-200">
-                Haz clic para subir o arrastra una imagen aquí
+            <label className="border-2 border-dashed border-slate-700 hover:border-amber-500 rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center cursor-pointer bg-slate-950/40 hover:bg-slate-950 transition-all touch-manipulation min-h-[160px]">
+              <Upload className="w-8 h-8 sm:w-10 sm:h-10 text-amber-400 mb-2 sm:mb-3" />
+              <span className="text-xs sm:text-sm font-bold text-slate-200 text-center">
+                Haz clic para subir o tomar foto de planilla
               </span>
-              <span className="text-xs text-slate-500 mt-1">
-                Soporta archivos PNG, JPG, JPEG o capturas de pantalla de planillas
+              <span className="text-[11px] text-slate-500 mt-1 text-center">
+                Soporta PNG, JPG, JPEG o fotos de cámara
               </span>
               <input
                 type="file"
@@ -138,11 +138,11 @@ export const ImageScannerModal: React.FC<ImageScannerModalProps> = ({
           {/* Image Preview & Scanner Trigger */}
           {selectedImage && !parsedRows && (
             <div className="space-y-4">
-              <div className="relative max-h-60 overflow-hidden rounded-xl border border-slate-800 bg-slate-950 flex justify-center">
-                <img src={selectedImage} alt="Planilla subida" className="object-contain max-h-60" />
+              <div className="relative max-h-56 overflow-hidden rounded-xl border border-slate-800 bg-slate-950 flex justify-center">
+                <img src={selectedImage} alt="Planilla subida" className="object-contain max-h-56" />
                 <button
                   onClick={() => setSelectedImage(null)}
-                  className="absolute top-2 right-2 p-1.5 bg-slate-900/80 text-white rounded-lg hover:bg-rose-600 transition-colors"
+                  className="absolute top-2 right-2 p-2 bg-slate-900/80 text-white rounded-lg hover:bg-rose-600 transition-colors touch-manipulation min-h-[36px] min-w-[36px] flex items-center justify-center"
                   title="Cambiar imagen"
                 >
                   <X className="w-4 h-4" />
@@ -152,12 +152,12 @@ export const ImageScannerModal: React.FC<ImageScannerModalProps> = ({
               {loading ? (
                 <div className="text-center py-6 space-y-2">
                   <RefreshCw className="w-7 h-7 text-amber-400 animate-spin mx-auto" />
-                  <p className="text-xs font-semibold text-slate-200">Extrayendo datos de la planilla con Gemini AI...</p>
+                  <p className="text-xs font-semibold text-slate-200">Extrayendo datos con Gemini AI...</p>
                 </div>
               ) : (
                 <button
                   onClick={processImageWithAI}
-                  className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg"
+                  className="w-full py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg touch-manipulation min-h-[44px]"
                 >
                   <Camera className="w-4 h-4" /> Procesar Imagen con IA
                 </button>
@@ -178,13 +178,13 @@ export const ImageScannerModal: React.FC<ImageScannerModalProps> = ({
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold text-emerald-400 flex items-center gap-1.5 uppercase tracking-wider">
-                  <CheckCircle className="w-4 h-4" /> Se extrajeron {parsedRows.length} fila(s) detectadas
+                  <CheckCircle className="w-4 h-4" /> Se extrajeron {parsedRows.length} fila(s)
                 </h3>
                 <button
                   onClick={() => setParsedRows(null)}
-                  className="text-xs text-slate-400 hover:text-white underline"
+                  className="text-xs text-slate-400 hover:text-white underline touch-manipulation min-h-[32px] px-2"
                 >
-                  Volver a intentar
+                  Reintentar
                 </button>
               </div>
 
@@ -192,12 +192,10 @@ export const ImageScannerModal: React.FC<ImageScannerModalProps> = ({
                 <table className="w-full text-left text-xs text-slate-300">
                   <thead className="bg-slate-900 text-slate-400 border-b border-slate-800">
                     <tr>
-                      <th className="p-2">Juego N°</th>
-                      <th className="p-2">Entrenador</th>
-                      <th className="p-2">Jugada Desafiada</th>
-                      <th className="p-2">Desafío</th>
-                      <th className="p-2">Árbitros</th>
-                      <th className="p-2">Arbitraje</th>
+                      <th className="p-2">Juego</th>
+                      <th className="p-2">Coach</th>
+                      <th className="p-2">Jugada</th>
+                      <th className="p-2">Resultado</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-800/60">
@@ -207,8 +205,6 @@ export const ImageScannerModal: React.FC<ImageScannerModalProps> = ({
                         <td className="p-2">{r.coachName || '-'}</td>
                         <td className="p-2">{r.challengedPlay || '-'}</td>
                         <td className="p-2 font-bold text-amber-400">{r.coachResult || 'GANA'}</td>
-                        <td className="p-2">{r.referees || '-'}</td>
-                        <td className="p-2 font-bold text-blue-400">{r.refereeDecision || 'REVOCA'}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -217,9 +213,9 @@ export const ImageScannerModal: React.FC<ImageScannerModalProps> = ({
 
               <button
                 onClick={handleConfirmImport}
-                className="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg"
+                className="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg touch-manipulation min-h-[44px]"
               >
-                <Plus className="w-4 h-4" /> Importar {parsedRows.length} Registros a la Planilla Principal
+                <Plus className="w-4 h-4" /> Importar {parsedRows.length} Registros
               </button>
             </div>
           )}

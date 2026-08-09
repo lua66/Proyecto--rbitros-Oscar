@@ -38,6 +38,8 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
 
   const [sortField, setSortField] = useState<'date' | 'gameNumber' | 'createdAt'>('createdAt');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [mobileDisplayMode, setMobileDisplayMode] = useState<'cards' | 'table'>('cards');
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Unique lists for filter dropdowns
   const uniqueCoaches = useMemo(() => {
@@ -128,68 +130,112 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
   return (
     <div className="space-y-4">
       {/* Search & Filters Bar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 shadow-sm">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-          
-          {/* General Search Input */}
-          <div className="relative lg:col-span-2">
-            <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Buscar por Juego N°, Coach, Árbitro o Jugada..."
-              value={filters.search}
-              onChange={(e) => setFilters({ ...filters, search: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-9 pr-3 py-2 text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
-            />
-          </div>
+      <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 shadow-sm">
+        
+        {/* Mobile Header & Search Row */}
+        <div className="flex flex-col gap-2.5">
+          <div className="flex items-center gap-2">
+            {/* General Search Input */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Buscar por Juego, Coach, Árbitro, Jugada..."
+                value={filters.search}
+                onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-3 py-2 text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-colors min-h-[40px]"
+              />
+            </div>
 
-          {/* Coach Filter */}
-          <div>
-            <select
-              value={filters.coach}
-              onChange={(e) => setFilters({ ...filters, coach: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs sm:text-sm text-slate-300 focus:outline-none focus:border-amber-500"
+            {/* Mobile Filter Toggle Button */}
+            <button
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+              className={`p-2.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors sm:hidden min-h-[40px] shrink-0 ${
+                showMobileFilters || filters.coach || filters.referee || filters.result !== 'ALL'
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  : 'bg-slate-950 text-slate-400 border-slate-800'
+              }`}
             >
-              <option value="">Todos los Entrenadores</option>
-              {uniqueCoaches.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+              <Filter className="w-4 h-4" />
+              <span>Filtros</span>
+            </button>
+
+            {/* Display Mode Toggle for Mobile */}
+            <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 md:hidden shrink-0">
+              <button
+                onClick={() => setMobileDisplayMode('cards')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all min-h-[32px] ${
+                  mobileDisplayMode === 'cards'
+                    ? 'bg-amber-500 text-slate-950'
+                    : 'text-slate-400'
+                }`}
+                title="Vista de Tarjetas"
+              >
+                Tarjetas
+              </button>
+              <button
+                onClick={() => setMobileDisplayMode('table')}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all min-h-[32px] ${
+                  mobileDisplayMode === 'table'
+                    ? 'bg-amber-500 text-slate-950'
+                    : 'text-slate-400'
+                }`}
+                title="Vista de Tabla completa"
+              >
+                Tabla
+              </button>
+            </div>
           </div>
 
-          {/* Referee Filter */}
-          <div>
-            <select
-              value={filters.referee}
-              onChange={(e) => setFilters({ ...filters, referee: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs sm:text-sm text-slate-300 focus:outline-none focus:border-amber-500"
-            >
-              <option value="">Todos los Árbitros</option>
-              {uniqueReferees.map((r) => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/* Filter Dropdowns Grid */}
+          <div className={`grid grid-cols-1 sm:grid-cols-3 gap-2.5 ${showMobileFilters ? 'block' : 'hidden sm:grid'}`}>
+            {/* Coach Filter */}
+            <div>
+              <select
+                value={filters.coach}
+                onChange={(e) => setFilters({ ...filters, coach: e.target.value })}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-300 focus:outline-none focus:border-amber-500 min-h-[38px]"
+              >
+                <option value="">Todos los Entrenadores</option>
+                {uniqueCoaches.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Result Filter */}
-          <div>
-            <select
-              value={filters.result}
-              onChange={(e) => setFilters({ ...filters, result: e.target.value })}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs sm:text-sm text-slate-300 focus:outline-none focus:border-amber-500"
-            >
-              <option value="ALL">Todos los Resultados</option>
-              <option value="GANA">Desafío: Gana Coach</option>
-              <option value="PIERDE">Desafío: Pierde Coach</option>
-              <option value="REVOCA">Arbitraje: Revoca Decisión</option>
-              <option value="MANTIENE">Arbitraje: Mantiene Decisión</option>
-            </select>
-          </div>
+            {/* Referee Filter */}
+            <div>
+              <select
+                value={filters.referee}
+                onChange={(e) => setFilters({ ...filters, referee: e.target.value })}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-300 focus:outline-none focus:border-amber-500 min-h-[38px]"
+              >
+                <option value="">Todos los Árbitros</option>
+                {uniqueReferees.map((r) => (
+                  <option key={r} value={r}>
+                    {r}
+                  </option>
+                ))}
+              </select>
+            </div>
 
+            {/* Result Filter */}
+            <div>
+              <select
+                value={filters.result}
+                onChange={(e) => setFilters({ ...filters, result: e.target.value })}
+                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-300 focus:outline-none focus:border-amber-500 min-h-[38px]"
+              >
+                <option value="ALL">Todos los Resultados</option>
+                <option value="GANA">Desafío: Gana Coach</option>
+                <option value="PIERDE">Desafío: Pierde Coach</option>
+                <option value="REVOCA">Arbitraje: Revoca Decisión</option>
+                <option value="MANTIENE">Arbitraje: Mantiene Decisión</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         {/* Active Filter Indicators & Reset */}
@@ -200,7 +246,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
             </span>
             <button
               onClick={resetFilters}
-              className="text-amber-400 hover:text-amber-300 underline flex items-center gap-1 font-medium"
+              className="text-amber-400 hover:text-amber-300 underline flex items-center gap-1 font-medium touch-manipulation min-h-[32px] px-2"
             >
               <Filter className="w-3 h-3" /> Limpiar Filtros
             </button>
@@ -208,10 +254,140 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
         )}
       </div>
 
-      {/* Main Table replicating the exact format from the sheet */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+      {/* MOBILE CARDS VIEW (Displayed on mobile screens when mode is 'cards') */}
+      {mobileDisplayMode === 'cards' && (
+        <div className="block md:hidden space-y-3">
+          {filteredRecords.length === 0 ? (
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 text-center text-slate-500">
+              <FileSpreadsheet className="w-10 h-10 text-slate-600 stroke-[1.5] mx-auto mb-2" />
+              <p className="text-sm font-medium text-slate-400">No se encontraron registros de revisiones</p>
+              <p className="text-xs text-slate-500 mt-1">Ajuste los filtros de búsqueda o añada un nuevo registro.</p>
+              <button
+                onClick={onOpenNewRecord}
+                className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs shadow-md"
+              >
+                <Plus className="w-4 h-4" /> Registrar Revisión
+              </button>
+            </div>
+          ) : (
+            filteredRecords.map((r) => {
+              const isCoachWon = r.coachResult === 'GANA';
+              const isCoachLost = r.coachResult === 'PIERDE';
+              const isDecisionRevoked = r.refereeDecision === 'REVOCA';
+
+              return (
+                <div
+                  key={r.id}
+                  className="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-md space-y-3 relative overflow-hidden"
+                >
+                  {/* Card Header: Game & Date */}
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-extrabold px-2.5 py-1 rounded-lg">
+                        {r.gameNumber}
+                      </span>
+                      {r.teams && (
+                        <span className="text-xs font-semibold text-slate-300 truncate max-w-[140px]">
+                          {r.teams}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[11px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+                      {r.date || '-'}
+                    </span>
+                  </div>
+
+                  {/* Coach & Challenge Row */}
+                  <div className="grid grid-cols-1 gap-2 bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold block">
+                          Coach Challenge
+                        </span>
+                        <span className="text-xs font-bold text-white">
+                          {r.coachName} {r.coachTeam ? `(${r.coachTeam})` : ''}
+                        </span>
+                      </div>
+                      
+                      {/* Coach Result Tag */}
+                      {isCoachWon ? (
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold">
+                          <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> GANA
+                        </span>
+                      ) : isCoachLost ? (
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-bold">
+                          <XCircle className="w-3.5 h-3.5 mr-1" /> PIERDE
+                        </span>
+                      ) : (
+                        <span className="text-xs text-slate-500">-</span>
+                      )}
+                    </div>
+
+                    <div>
+                      <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold block">
+                        Jugada Desafiada
+                      </span>
+                      <p className="text-xs text-amber-300 font-medium">{r.challengedPlay}</p>
+                    </div>
+
+                    {r.notes && (
+                      <p className="text-[11px] text-slate-400 bg-slate-900/80 p-2 rounded-lg italic border border-slate-800">
+                        "{r.notes}"
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Referees & Decision Row */}
+                  <div className="flex items-center justify-between bg-slate-950/40 p-3 rounded-xl border border-slate-800/80">
+                    <div>
+                      <span className="text-[10px] uppercase tracking-wider text-slate-500 font-bold block">
+                        Terna Arbitral / IRS
+                      </span>
+                      <p className="text-xs text-slate-300 truncate max-w-[180px]">{r.referees}</p>
+                    </div>
+
+                    {/* Referee Decision Tag */}
+                    {isDecisionRevoked ? (
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-extrabold">
+                        REVOCA
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700 text-xs font-medium">
+                        MANTIENE
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Actions Bar */}
+                  <div className="flex items-center justify-end gap-2 pt-1 border-t border-slate-800/60">
+                    <button
+                      onClick={() => onEditRecord(r)}
+                      className="px-3 py-2 bg-slate-800 hover:bg-slate-750 text-amber-400 border border-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 touch-manipulation min-h-[38px]"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                      <span>Editar</span>
+                    </button>
+                    <button
+                      onClick={() => onDeleteRecord(r)}
+                      className="px-3 py-2 bg-slate-800 hover:bg-rose-950/50 text-rose-400 border border-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 touch-manipulation min-h-[38px]"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Eliminar</span>
+                    </button>
+                  </div>
+
+                </div>
+              );
+            })
+          )}
+        </div>
+      )}
+
+      {/* Main Table (Displayed on desktop or when 'table' mode is selected on mobile) */}
+      <div className={`bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl ${mobileDisplayMode === 'table' ? 'block' : 'hidden md:block'}`}>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[900px]">
+
             
             {/* Top Header Section Banner */}
             <thead>
