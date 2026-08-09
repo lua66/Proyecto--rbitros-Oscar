@@ -11,7 +11,7 @@ import { ImageScannerModal } from './components/ImageScannerModal';
 import { DeleteConfirmModal } from './components/DeleteConfirmModal';
 import { ResetConfirmModal } from './components/ResetConfirmModal';
 
-const STORAGE_KEY = 'referee_irs_review_records_v1';
+const STORAGE_KEY = 'referee_irs_review_records_v3';
 
 export default function App() {
   const [records, setRecords] = useState<ReviewRecord[]>(() => {
@@ -19,14 +19,14 @@ export default function App() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           return parsed;
         }
       }
     } catch (e) {
       console.error('Failed to load records from localStorage:', e);
     }
-    return SAMPLE_RECORDS;
+    return [];
   });
 
   const [activeView, setActiveView] = useState<'table' | 'analytics'>('table');
