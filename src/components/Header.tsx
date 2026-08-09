@@ -41,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="relative w-11 h-11 rounded-xl overflow-hidden border border-amber-500/40 shadow-inner shrink-0 bg-slate-950 flex items-center justify-center">
               <img
                 id="header-app-logo"
-                src="/src/assets/images/basketball_irs_favicon_1786309760867.jpg"
+                src="/logo.jpg"
                 alt="Favicon Logo IRS"
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
