@@ -38,8 +38,14 @@ export const Header: React.FC<HeaderProps> = ({
           
           {/* Logo & Title */}
           <div className="flex items-center space-x-3">
-            <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-400 shadow-inner">
-              <ClipboardList className="w-7 h-7" />
+            <div className="relative w-11 h-11 rounded-xl overflow-hidden border border-amber-500/40 shadow-inner shrink-0 bg-slate-950 flex items-center justify-center">
+              <img
+                id="header-app-logo"
+                src="/src/assets/images/basketball_irs_favicon_1786309760867.jpg"
+                alt="Favicon Logo IRS"
+                className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
+              />
             </div>
             <div>
               <div className="flex items-center gap-2">
