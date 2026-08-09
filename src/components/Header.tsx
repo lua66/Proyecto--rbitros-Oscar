@@ -51,7 +51,14 @@ export const Header: React.FC<HeaderProps> = ({
                     src={logoImg}
                     alt="Logo IRS"
                     className="w-full h-full object-cover"
-                    onError={() => setImgError(true)}
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.src.includes('/logo.png')) {
+                        target.src = '/logo.png';
+                      } else {
+                        setImgError(true);
+                      }
+                    }}
                   />
                 ) : (
                   <div className="p-2 text-amber-400">
