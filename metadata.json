@@ -1,0 +1,6 @@
+{
+  "name": "Control de Revisiones IRS y Desafíos de Árbitros",
+  "description": "Sistema de registro, estadísticas y análisis de solicitudes de revisiones de coaches y árbitros (Coach's Challenge e Instant Replay System - IRS).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
