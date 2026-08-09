@@ -134,7 +134,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
         
         {/* Mobile Header & Search Row */}
         <div className="flex flex-col gap-2.5">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
             {/* General Search Input */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-2.5 w-4 h-4 text-slate-400" />
