@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import logoImg from '../assets/images/basketball_irs_favicon_1786309760867.jpg';
 import { 
   ClipboardList, 
   PlusCircle, 
@@ -31,6 +32,8 @@ export const Header: React.FC<HeaderProps> = ({
   setActiveView,
   totalRecords,
 }) => {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <header className="bg-slate-900 border-b border-slate-800 text-white sticky top-0 z-30 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -39,13 +42,19 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Logo & Title */}
           <div className="flex items-center space-x-3">
             <div className="relative w-11 h-11 rounded-xl overflow-hidden border border-amber-500/40 shadow-inner shrink-0 bg-slate-950 flex items-center justify-center">
-              <img
-                id="header-app-logo"
-                src="/logo.jpg"
-                alt="Favicon Logo IRS"
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
+              {!imgError ? (
+                <img
+                  id="header-app-logo"
+                  src={logoImg}
+                  alt="Logo IRS"
+                  className="w-full h-full object-cover"
+                  onError={() => setImgError(true)}
+                />
+              ) : (
+                <div className="p-2 text-amber-400">
+                  <ClipboardList className="w-6 h-6" />
+                </div>
+              )}
             </div>
             <div>
               <div className="flex items-center gap-2">
