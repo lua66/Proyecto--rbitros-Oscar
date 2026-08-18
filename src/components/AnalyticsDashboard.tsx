@@ -41,6 +41,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ records 
   const totalRevokedDecisions = records.filter((r) => r.refereeDecision === 'REVOCA').length;
   const totalMaintainedDecisions = records.filter((r) => r.refereeDecision === 'MANTIENE').length;
   const decisionRevocationRate = totalReviews > 0 ? Math.round((totalRevokedDecisions / totalReviews) * 100) : 0;
+  const totalTechnicalFouls = records.reduce((sum, r) => sum + (Number(r.technicalFouls) || 0), 0);
 
   // Pie chart data for overall outcomes
   const outcomePieData = [
@@ -266,6 +267,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ records 
                   <th className="py-2.5 px-3 text-center">IRS Total</th>
                   <th className="py-2.5 px-3 text-center text-blue-400">Mantiene</th>
                   <th className="py-2.5 px-3 text-center text-amber-400">Revoca</th>
+                  <th className="py-2.5 px-3 text-center text-purple-400">F.Técnicas</th>
                   <th className="py-2.5 px-3 text-center">% Confirmación</th>
                 </tr>
               </thead>
@@ -276,6 +278,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ records 
                     <td className="py-2.5 px-3 text-center font-bold">{ref.totalIRSAssisted}</td>
                     <td className="py-2.5 px-3 text-center text-blue-400">{ref.decisionsMaintained}</td>
                     <td className="py-2.5 px-3 text-center text-amber-400">{ref.decisionsRevoked}</td>
+                    <td className="py-2.5 px-3 text-center font-bold text-purple-400">
+                      {ref.technicalFouls || 0}
+                    </td>
                     <td className="py-2.5 px-3 text-center font-bold text-emerald-400">
                       {ref.maintainRate}%
                     </td>
@@ -301,6 +306,7 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ records 
                   <th className="py-2.5 px-3 text-center">Desafíos</th>
                   <th className="py-2.5 px-3 text-center text-emerald-400">Gana</th>
                   <th className="py-2.5 px-3 text-center text-rose-400">Pierde</th>
+                  <th className="py-2.5 px-3 text-center text-purple-400">F.Técnicas</th>
                   <th className="py-2.5 px-3 text-center">% Éxito</th>
                 </tr>
               </thead>
@@ -314,6 +320,9 @@ export const AnalyticsDashboard: React.FC<AnalyticsDashboardProps> = ({ records 
                     <td className="py-2.5 px-3 text-center font-bold">{coach.totalChallenges}</td>
                     <td className="py-2.5 px-3 text-center text-emerald-400">{coach.won}</td>
                     <td className="py-2.5 px-3 text-center text-rose-400">{coach.lost}</td>
+                    <td className="py-2.5 px-3 text-center font-bold text-purple-400">
+                      {coach.technicalFouls || 0}
+                    </td>
                     <td className="py-2.5 px-3 text-center font-bold text-amber-400">
                       {coach.winRate}%
                     </td>

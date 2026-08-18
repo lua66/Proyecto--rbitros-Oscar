@@ -26,6 +26,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({
   const [challengedPlay, setChallengedPlay] = useState('');
   const [customPlay, setCustomPlay] = useState('');
   const [coachResult, setCoachResult] = useState<ChallengeResult>('GANA');
+  const [technicalFouls, setTechnicalFouls] = useState<number>(0);
 
   // Referee IRS fields
   const [referees, setReferees] = useState('');
@@ -52,6 +53,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({
       }
 
       setCoachResult(initialData.coachResult || 'GANA');
+      setTechnicalFouls(Number(initialData.technicalFouls) || 0);
       setReferees(initialData.referees || '');
       setAssistedIRS(initialData.assistedIRS ?? true);
       setRefereeDecision(initialData.refereeDecision || 'REVOCA');
@@ -66,6 +68,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({
       setChallengedPlay(COMMON_PLAY_TYPES[0]);
       setCustomPlay('');
       setCoachResult('GANA');
+      setTechnicalFouls(0);
       setReferees('');
       setAssistedIRS(true);
       setRefereeDecision('REVOCA');
@@ -118,6 +121,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({
       coachTeam: coachTeam.trim() || undefined,
       challengedPlay: finalPlay.trim(),
       coachResult,
+      technicalFouls: Math.max(0, Number(technicalFouls) || 0),
       referees: referees.trim(),
       assistedIRS,
       refereeDecision,
@@ -299,6 +303,45 @@ export const RecordModal: React.FC<RecordModalProps> = ({
                 >
                   <X className="w-4 h-4 shrink-0" /> PIERDE (Error)
                 </button>
+              </div>
+            </div>
+
+            {/* Technical Fouls Input */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-semibold text-slate-300">
+                  FALTAS TÉCNICAS (F.TÉCNICAS)
+                </label>
+                <span className="text-[11px] text-purple-400 font-bold">
+                  {technicalFouls} {technicalFouls === 1 ? 'falta técnica' : 'faltas técnicas'}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                {[0, 1, 2, 3].map((num) => (
+                  <button
+                    key={num}
+                    type="button"
+                    onClick={() => setTechnicalFouls(num)}
+                    className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-bold border transition-all touch-manipulation min-h-[38px] ${
+                      technicalFouls === num
+                        ? 'bg-purple-500/20 text-purple-300 border-purple-500'
+                        : 'bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700'
+                    }`}
+                  >
+                    {num}
+                  </button>
+                ))}
+                <div className="flex items-center bg-slate-900 border border-slate-800 rounded-xl px-2 min-h-[38px] w-24">
+                  <span className="text-[10px] text-slate-500 mr-1">Otro:</span>
+                  <input
+                    type="number"
+                    min="0"
+                    max="99"
+                    value={technicalFouls}
+                    onChange={(e) => setTechnicalFouls(Math.max(0, parseInt(e.target.value) || 0))}
+                    className="w-full bg-transparent text-xs text-purple-300 font-bold focus:outline-none text-center"
+                  />
+                </div>
               </div>
             </div>
           </div>

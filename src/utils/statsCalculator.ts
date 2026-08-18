@@ -1,14 +1,14 @@
 import { ReviewRecord, RefereeStats, CoachStats, PlayTypeStats } from '../types';
 
 export function calculateRefereeStats(records: ReviewRecord[]): RefereeStats[] {
-  const refMap = new Map<string, { total: number; maintained: number; revoked: number }>();
+  const refMap = new Map<string, { total: number; maintained: number; revoked: number; technicalFouls: number }>();
 
   records.forEach((rec) => {
     // split refs by comma if multiple
     const refList = rec.referees.split(',').map((r) => r.trim()).filter((r) => r.length > 0);
 
     refList.forEach((ref) => {
-      const current = refMap.get(ref) || { total: 0, maintained: 0, revoked: 0 };
+      const current = refMap.get(ref) || { total: 0, maintained: 0, revoked: 0, technicalFouls: 0 };
       if (rec.assistedIRS) {
         current.total += 1;
         if (rec.refereeDecision === 'MANTIENE') {
@@ -17,6 +17,7 @@ export function calculateRefereeStats(records: ReviewRecord[]): RefereeStats[] {
           current.revoked += 1;
         }
       }
+      current.technicalFouls += Number(rec.technicalFouls) || 0;
       refMap.set(ref, current);
     });
   });
@@ -30,6 +31,7 @@ export function calculateRefereeStats(records: ReviewRecord[]): RefereeStats[] {
       totalIRSAssisted: val.total,
       decisionsMaintained: val.maintained,
       decisionsRevoked: val.revoked,
+      technicalFouls: val.technicalFouls,
       maintainRate,
       revocationRate,
     });
@@ -39,19 +41,20 @@ export function calculateRefereeStats(records: ReviewRecord[]): RefereeStats[] {
 }
 
 export function calculateCoachStats(records: ReviewRecord[]): CoachStats[] {
-  const coachMap = new Map<string, { won: number; lost: number; total: number; team?: string }>();
+  const coachMap = new Map<string, { won: number; lost: number; total: number; technicalFouls: number; team?: string }>();
 
   records.forEach((rec) => {
     const coachKey = rec.coachName.trim();
     if (!coachKey) return;
 
-    const current = coachMap.get(coachKey) || { won: 0, lost: 0, total: 0, team: rec.coachTeam };
+    const current = coachMap.get(coachKey) || { won: 0, lost: 0, total: 0, technicalFouls: 0, team: rec.coachTeam };
     current.total += 1;
     if (rec.coachResult === 'GANA') {
       current.won += 1;
     } else if (rec.coachResult === 'PIERDE') {
       current.lost += 1;
     }
+    current.technicalFouls += Number(rec.technicalFouls) || 0;
     if (rec.coachTeam) current.team = rec.coachTeam;
     coachMap.set(coachKey, current);
   });
@@ -65,6 +68,7 @@ export function calculateCoachStats(records: ReviewRecord[]): CoachStats[] {
       totalChallenges: val.total,
       won: val.won,
       lost: val.lost,
+      technicalFouls: val.technicalFouls,
       winRate,
     });
   });
@@ -109,6 +113,7 @@ export function exportToCSV(records: ReviewRecord[]): void {
     'EQUIPO ENTRENADOR',
     'DESAFIA JUGADA',
     'RESULTADO DESAFIO (GANA/PIERDE)',
+    'F.TECNICAS',
     'ARBITROS',
     'ASISTEN AL IRS',
     'DECISION ARBITRAL (MANTIENE/REVOCA)',
@@ -123,6 +128,7 @@ export function exportToCSV(records: ReviewRecord[]): void {
     `"${r.coachTeam || ''}"`,
     `"${r.challengedPlay}"`,
     `"${r.coachResult}"`,
+    `"${r.technicalFouls || 0}"`,
     `"${r.referees}"`,
     `"${r.assistedIRS ? 'SI' : 'NO'}"`,
     `"${r.refereeDecision}"`,

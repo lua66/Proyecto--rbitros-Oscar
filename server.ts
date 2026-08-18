@@ -38,8 +38,9 @@ Análisis a incluir:
 1. Resumen Ejecutivo de Tendencias de Decisión (Porcentaje global de Revocaciones vs Decisiones Mantenidas).
 2. Rendimiento y Firmeza de Árbitros (Quiénes acuden más al IRS y su tasa de confirmación/revocación).
 3. Efectividad de Desafíos de Coaches (Quiénes desafían mejor y en qué tipo de jugadas).
-4. Tipos de Jugadas más Conflictivas (Faltas personales, fueras de banda, 24s, etc.).
-5. Recomendaciones Técnicas para el Comité de Árbitros o Entrenadores.
+4. Faltas Técnicas (F.Técnicas sancionadas o asociadas a los desafíos).
+5. Tipos de Jugadas más Conflictivas (Faltas personales, fueras de banda, 24s, etc.).
+6. Recomendaciones Técnicas para el Comité de Árbitros o Entrenadores.
 
 Usa un tono técnico, claro, neutral y fundamentado en los datos.`;
 
@@ -83,6 +84,7 @@ Extrae los datos visibles en una lista de objetos JSON estructurada con la sigui
     "coachTeam": "string (Equipo si se conoce)",
     "challengedPlay": "string (Jugada que desafía)",
     "coachResult": "GANA | PIERDE | N/A",
+    "technicalFouls": 0,
     "referees": "string (Nombres de árbitros involucrados)",
     "assistedIRS": true,
     "refereeDecision": "MANTIENE | REVOCA | N/A",

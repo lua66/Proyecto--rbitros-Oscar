@@ -309,18 +309,25 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
                         </span>
                       </div>
                       
-                      {/* Coach Result Tag */}
-                      {isCoachWon ? (
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold">
-                          <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> GANA
-                        </span>
-                      ) : isCoachLost ? (
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-bold">
-                          <XCircle className="w-3.5 h-3.5 mr-1" /> PIERDE
-                        </span>
-                      ) : (
-                        <span className="text-xs text-slate-500">-</span>
-                      )}
+                      {/* Coach Result Tag & F.Técnicas */}
+                      <div className="flex items-center gap-1.5 flex-wrap justify-end">
+                        {r.technicalFouls && r.technicalFouls > 0 ? (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-extrabold">
+                            {r.technicalFouls} {r.technicalFouls === 1 ? 'Técnica' : 'Técnicas'}
+                          </span>
+                        ) : null}
+                        {isCoachWon ? (
+                          <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold">
+                            <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> GANA
+                          </span>
+                        ) : isCoachLost ? (
+                          <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-bold">
+                            <XCircle className="w-3.5 h-3.5 mr-1" /> PIERDE
+                          </span>
+                        ) : (
+                          <span className="text-xs text-slate-500">-</span>
+                        )}
+                      </div>
                     </div>
 
                     <div>
@@ -393,7 +400,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
             <thead>
               {/* Row 1: Master Title Headers */}
               <tr className="bg-slate-950 text-slate-200 border-b border-slate-800">
-                <th colSpan={6} className="py-2.5 px-4 text-center font-bold text-xs uppercase tracking-wider text-amber-400 border-r border-slate-800 bg-amber-500/10">
+                <th colSpan={7} className="py-2.5 px-4 text-center font-bold text-xs uppercase tracking-wider text-amber-400 border-r border-slate-800 bg-amber-500/10">
                   COACH'S CHALLENGE (DESAFÍOS DE ENTRENADORES)
                 </th>
                 <th colSpan={4} className="py-2.5 px-4 text-center font-bold text-xs uppercase tracking-wider text-blue-400 bg-blue-500/10 border-r border-slate-800">
@@ -419,6 +426,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
                 <th className="py-2.5 px-3 border-r border-slate-700 min-w-[180px]">DESAFÍA JUGADA</th>
                 <th className="py-2.5 px-3 text-center border-r border-slate-700 w-20 text-emerald-400 bg-emerald-950/20">GANA</th>
                 <th className="py-2.5 px-3 text-center border-r border-slate-700 w-20 text-rose-400 bg-rose-950/20">PIERDE</th>
+                <th className="py-2.5 px-3 text-center border-r border-slate-700 w-24 text-purple-400 bg-purple-950/20">F.TÉCNICAS</th>
 
                 {/* Referee IRS Columns */}
                 <th className="py-2.5 px-3 border-r border-slate-700 min-w-[160px]">ÁRBITROS</th>
@@ -434,7 +442,7 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
             <tbody className="divide-y divide-slate-800 text-xs sm:text-sm text-slate-300">
               {filteredRecords.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="py-12 text-center text-slate-500">
+                  <td colSpan={12} className="py-12 text-center text-slate-500">
                     <div className="flex flex-col items-center justify-center space-y-2">
                       <FileSpreadsheet className="w-10 h-10 text-slate-600 stroke-[1.5]" />
                       <p className="text-sm font-medium text-slate-400">No se encontraron registros de revisiones</p>
@@ -505,6 +513,17 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
                           </span>
                         ) : (
                           <span className="text-slate-600">-</span>
+                        )}
+                      </td>
+
+                      {/* F.TÉCNICAS */}
+                      <td className="py-3 px-3 text-center border-r border-slate-800 font-bold">
+                        {r.technicalFouls && r.technicalFouls > 0 ? (
+                          <span className="inline-flex items-center justify-center px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-xs font-extrabold">
+                            {r.technicalFouls}
+                          </span>
+                        ) : (
+                          <span className="text-slate-600">0</span>
                         )}
                       </td>
 
@@ -593,6 +612,9 @@ export const SpreadsheetTable: React.FC<SpreadsheetTableProps> = ({
             </span>
             <span className="inline-flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-amber-400"></span> Árbitro Revoca: {filteredRecords.filter((r) => r.refereeDecision === 'REVOCA').length}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <span className="w-2 h-2 rounded-full bg-purple-400"></span> F.Técnicas: {filteredRecords.reduce((sum, r) => sum + (Number(r.technicalFouls) || 0), 0)}
             </span>
           </div>
         </div>

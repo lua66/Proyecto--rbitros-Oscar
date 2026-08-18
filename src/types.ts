@@ -12,6 +12,7 @@ export interface ReviewRecord {
   coachTeam?: string;
   challengedPlay: string;
   coachResult: ChallengeResult;
+  technicalFouls?: number;
   
   // Ref. Order IRS
   referees: string; // Comma-separated or referee names
@@ -37,6 +38,7 @@ export interface RefereeStats {
   totalIRSAssisted: number;
   decisionsMaintained: number;
   decisionsRevoked: number;
+  technicalFouls: number;
   maintainRate: number; // percentage
   revocationRate: number; // percentage
 }
@@ -47,6 +49,7 @@ export interface CoachStats {
   totalChallenges: number;
   won: number;
   lost: number;
+  technicalFouls: number;
   winRate: number; // percentage
 }
 

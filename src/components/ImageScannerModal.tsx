@@ -73,6 +73,7 @@ export const ImageScannerModal: React.FC<ImageScannerModalProps> = ({
       coachTeam: row.coachTeam || undefined,
       challengedPlay: row.challengedPlay || 'Revisión IRS',
       coachResult: row.coachResult === 'GANA' || row.coachResult === 'PIERDE' ? row.coachResult : 'GANA',
+      technicalFouls: Number(row.technicalFouls) || 0,
       referees: row.referees || 'Árbitro No Especificado',
       assistedIRS: row.assistedIRS ?? true,
       refereeDecision: row.refereeDecision === 'MANTIENE' || row.refereeDecision === 'REVOCA' ? row.refereeDecision : 'REVOCA',
